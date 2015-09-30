@@ -4,12 +4,13 @@
 #include <vector>
 #include <ostream>
 
+#include "o_sdo/sujetdobservation.h"
 #include "piece.h"
 #include "color.h"
 #include "gamestate.h"
 #include "gameaction.h"
 
-class Game
+class Game : public SujetDObservation
 {
 private:
     std::vector<std::vector<Piece>> _board;

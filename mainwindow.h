@@ -4,6 +4,7 @@
 #include <QMainWindow>
 
 #include "game.h"
+#include "gameobserver.h"
 
 namespace Ui {
 class MainWindow;
@@ -20,9 +21,11 @@ public:
 private:
     Ui::MainWindow *ui;
     Game *game;
+    GameObserver *gameObserver;
 
-    void connection();
     void printBoard();
+    void connection();
+    void setObserver();
 
 private slots:
     void newGame();

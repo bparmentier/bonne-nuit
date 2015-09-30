@@ -16,15 +16,18 @@ CONFIG += c++11
 SOURCES += main.cpp\
         mainwindow.cpp \
     game.cpp \
-    piece.cpp
+    piece.cpp \
+    gameobserver.cpp \
+    o_sdo/sujetdobservation.cpp
 
 HEADERS  += mainwindow.h \
     o_sdo/observateur.h \
-    o_sdo/sujetdobservation.h \
     game.h \
     color.h \
     gamestate.h \
     piece.h \
-    gameaction.h
+    gameaction.h \
+    gameobserver.h \
+    o_sdo/sujetdobservation.h
 
 FORMS    += mainwindow.ui
