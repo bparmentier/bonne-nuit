@@ -20,8 +20,14 @@ public:
 private:
     Ui::MainWindow *ui;
     Game *game;
-    void newGame();
+
+    void connection();
     void printBoard();
+
+private slots:
+    void newGame();
+    void closeGame();
+    void help();
 };
 
 #endif // MAINWINDOW_H
