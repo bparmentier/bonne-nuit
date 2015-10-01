@@ -71,10 +71,10 @@ void MainWindow::newGame()
 
     setObserver();
 
-    unsigned line;
-    unsigned column;
+//    unsigned line;
+//    unsigned column;
 
-    std::cout << *game << std::endl;
+//    std::cout << *game << std::endl;
 
 //    while (game->gameState() == GameState::FIRST_STAGE) {
 //        std::cout << game->currentPlayer() << " is playing" << std::endl;

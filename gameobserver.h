@@ -13,10 +13,14 @@ class Game;
 class GameObserver : public QGraphicsScene, public Observateur
 {
 private:
+    static const int KEY_RED_PAWN_INDICE = 0x0;
+    static const int KEY_STAR_PAWN_INDICE = 0x1;
+    static const int KEY_TYPE_RED_PAWN = 0x2;
+    static const int KEY_TYPE_STAR_PAWN = 0x3;
+
     Game *_game;
     std::vector<QGraphicsEllipseItem *> redPawns;
-    std::vector<QGraphicsEllipseItem *> starPawns;
-
+    std::vector<std::vector<QGraphicsEllipseItem *>> starPawns;
 
     void drawPawns(float xcenter, float ycenter, float radius, int pawnNumber);
     void drawStarPawns(float xcenter, float ycenter, float radius, int pawnNumber, int redPawnIndex);

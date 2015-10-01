@@ -21,6 +21,7 @@ void GameObserver::rafraichir(SujetDObservation *sdo)
     }
 
     updateRedPawns();
+    updateStarPawns();
 }
 
 void GameObserver::drawPawns(float xcenter, float ycenter, float radius, int pawnNumber)
@@ -39,13 +40,13 @@ void GameObserver::drawPawns(float xcenter, float ycenter, float radius, int paw
         x = xcenter + cosf(angle) * radius - (pawnDiameter / 2);
         y = ycenter + sinf(angle) * radius - (pawnDiameter / 2);
         QGraphicsEllipseItem *pawn;
+        pawn->setData(123, i);
         if (_game->dropPosition() == i) {
             pawn = addEllipse(x, y, pawnDiameter, pawnDiameter, pen, blueBrush);
         } else {
             pawn = addEllipse(x, y, pawnDiameter, pawnDiameter, pen, redBrush);
         }
 
-        pawn->setCursor(pointingHandCursor);
         redPawns.push_back(pawn);
 
         drawStarPawns(x + (pawnDiameter / 2), y + (pawnDiameter / 2), 30, 5, i);
@@ -63,14 +64,16 @@ void GameObserver::drawStarPawns(float xcenter, float ycenter,
 
     QPen pen{QPen(Qt::black)};
     QCursor pointingHandCursor{QCursor(Qt::PointingHandCursor)};
+    std::vector<QGraphicsEllipseItem *> pawnGroup;
 
     for (auto i = 0; i < pawnNumber; i++) {
         angle = i * (2.0f * M_PI / pawnNumber);
         x = xcenter + cosf(angle) * radius - pawnDiameter / 2;
         y = ycenter + sinf(angle) * radius - pawnDiameter / 2;
         Piece piece = _game->board().at(redPawnIndex).at(i);
-        QGraphicsEllipseItem *pawn;
-        pawn = addEllipse(x, y, pawnDiameter, pawnDiameter, pen);
+        QGraphicsEllipseItem *pawn = addEllipse(x, y, pawnDiameter, pawnDiameter);
+        pawn->setData(KEY_RED_PAWN_INDICE, redPawnIndex);
+        pawn->setData(KEY_STAR_PAWN_INDICE, i);
 
         switch (piece.color()) {
         case Color::BLACK:
@@ -90,12 +93,12 @@ void GameObserver::drawStarPawns(float xcenter, float ycenter,
             break;
         default:
             pawn->setBrush(Qt::NoBrush);
-
         }
 
         pawn->setCursor(pointingHandCursor);
-        starPawns.push_back(pawn);
+        pawnGroup.push_back(pawn);
     }
+    starPawns.push_back(pawnGroup);
 }
 
 void GameObserver::updateRedPawns()
@@ -112,16 +115,54 @@ void GameObserver::updateRedPawns()
 
 void GameObserver::updateStarPawns()
 {
+    for (auto redPawnIndice = 0; redPawnIndice < 9; ++redPawnIndice) {
+        for (auto starPawnIndice = 0; starPawnIndice < 5; ++starPawnIndice) {
 
+            Piece piece = _game->board().at(redPawnIndice).at(starPawnIndice);
+            QGraphicsEllipseItem *pawn = starPawns.at(redPawnIndice).at(starPawnIndice);
+
+            switch (piece.color()) {
+            case Color::BLACK:
+                pawn->setBrush(QBrush(QColor(Qt::black)));
+                break;
+            case Color::BLUE:
+                pawn->setBrush(QBrush(QColor(Qt::blue)));
+                break;
+            case Color::GREEN:
+                pawn->setBrush(QBrush(QColor(Qt::green)));
+                break;
+            case Color::PURPLE:
+                pawn->setBrush(QBrush(QColor(Qt::darkMagenta)));
+                break;
+            case Color::RED:
+                pawn->setBrush(QBrush(QColor(Qt::red)));
+                break;
+            default:
+                pawn->setBrush(Qt::NoBrush);
+            }
+        }
+    }
 }
 
 void GameObserver::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsScene::mousePressEvent(event);
-    QGraphicsItem *element = itemAt(event->lastScenePos().x(),
-                                    event->lastScenePos().y(),
-                                    QTransform());
+    QGraphicsItem *item = itemAt(event->lastScenePos().x(),
+                                 event->lastScenePos().y(),
+                                 QTransform());
 
+    if (!(item->data(KEY_RED_PAWN_INDICE).toString().isEmpty())
+            && !(item->data(KEY_STAR_PAWN_INDICE).toString().isEmpty())) {
+        if (item->data(KEY_RED_PAWN_INDICE).toInt() == _game->dropPosition()) {
+            try {
+                _game->placePiece(item->data(KEY_STAR_PAWN_INDICE).toInt());
+            } catch (std::runtime_error const &e) {
+                throw e;
+            } catch (std::invalid_argument const &e) {
+                throw e;
+            }
+        }
+    }
 }
 
 void GameObserver::keyPressEvent(QKeyEvent *event)
