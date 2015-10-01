@@ -68,8 +68,30 @@ void GameObserver::drawStarPawns(float xcenter, float ycenter,
         angle = i * (2.0f * M_PI / pawnNumber);
         x = xcenter + cosf(angle) * radius - pawnDiameter / 2;
         y = ycenter + sinf(angle) * radius - pawnDiameter / 2;
+        Piece piece = _game->board().at(redPawnIndex).at(i);
         QGraphicsEllipseItem *pawn;
         pawn = addEllipse(x, y, pawnDiameter, pawnDiameter, pen);
+
+        switch (piece.color()) {
+        case Color::BLACK:
+            pawn->setBrush(QBrush(QColor(Qt::black)));
+            break;
+        case Color::BLUE:
+            pawn->setBrush(QBrush(QColor(Qt::blue)));
+            break;
+        case Color::GREEN:
+            pawn->setBrush(QBrush(QColor(Qt::green)));
+            break;
+        case Color::PURPLE:
+            pawn->setBrush(QBrush(QColor(Qt::darkMagenta)));
+            break;
+        case Color::RED:
+            pawn->setBrush(QBrush(QColor(Qt::red)));
+            break;
+        default:
+            pawn->setBrush(Qt::NoBrush);
+
+        }
 
         pawn->setCursor(pointingHandCursor);
         starPawns.push_back(pawn);
@@ -78,8 +100,14 @@ void GameObserver::drawStarPawns(float xcenter, float ycenter,
 
 void GameObserver::updateRedPawns()
 {
-    QGraphicsEllipseItem *drop = redPawns.at(_game->dropPosition());
-    drop->setBrush(QBrush(QColor(Qt::blue)));
+    QBrush redBrush{QBrush(QColor(Qt::red))};
+    QBrush blueBrush{QBrush(QColor(Qt::blue))};
+    unsigned dropPosition = _game->dropPosition();
+
+    for (auto i = 0; i < 9; ++i) {
+        QGraphicsEllipseItem *pawn = redPawns.at(i);
+        pawn->setBrush((i == dropPosition) ? blueBrush : redBrush);
+    }
 }
 
 void GameObserver::updateStarPawns()
