@@ -16,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    delete gameObserver;
+    gameObserver = nullptr;
     delete game;
     game = nullptr;
     delete ui;
@@ -99,7 +101,10 @@ void MainWindow::newGame()
 
 void MainWindow::closeGame()
 {
-
+    delete gameObserver;
+    gameObserver = nullptr;
+    delete game;
+    game = nullptr;
 }
 
 void MainWindow::help()

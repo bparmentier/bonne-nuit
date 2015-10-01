@@ -3,6 +3,7 @@
 
 #include <QGraphicsScene>
 #include <QGraphicsItem>
+#include <QGraphicsSceneMouseEvent>
 
 #include "o_sdo/observateur.h"
 #include "game.h"
@@ -13,6 +14,9 @@ class GameObserver : public QGraphicsScene, public Observateur
 {
 private:
     Game *_game;
+    std::vector<QGraphicsEllipseItem *> redPawns;
+
+    void drawRedPawns(float xcenter, float ycenter, float radius, int pawnNumber);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void keyPressEvent(QKeyEvent *event);
 
