@@ -15,8 +15,13 @@ class GameObserver : public QGraphicsScene, public Observateur
 private:
     Game *_game;
     std::vector<QGraphicsEllipseItem *> redPawns;
+    std::vector<QGraphicsEllipseItem *> starPawns;
 
-    void drawRedPawns(float xcenter, float ycenter, float radius, int pawnNumber);
+
+    void drawPawns(float xcenter, float ycenter, float radius, int pawnNumber);
+    void drawStarPawns(float xcenter, float ycenter, float radius, int pawnNumber, int redPawnIndex);
+    void updateRedPawns();
+    void updateStarPawns();
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void keyPressEvent(QKeyEvent *event);
 
