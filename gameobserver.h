@@ -29,6 +29,7 @@ public:
     GameObserver(Game *game, QWidget *parent = 0);
     ~GameObserver();
     void rafraichir(SujetDObservation *sdo);
+    void rollDice();
 };
 
 #endif // GAMEOBSERVER_H

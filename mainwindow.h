@@ -31,6 +31,7 @@ private slots:
     void newGame();
     void closeGame();
     void help();
+    void rollDice();
 };
 
 #endif // MAINWINDOW_H

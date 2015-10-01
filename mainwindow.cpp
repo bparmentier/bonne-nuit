@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <stdexcept>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -34,6 +35,8 @@ void MainWindow::connection()
             this, &MainWindow::closeGame);
     connect(ui->action_Help, &QAction::triggered,
             this, &MainWindow::help);
+    connect(ui->rollDiceButton, &QPushButton::released,
+            this, &MainWindow::rollDice);
 }
 
 void MainWindow::setObserver()
@@ -44,6 +47,22 @@ void MainWindow::setObserver()
 
 void MainWindow::newGame()
 {
+    if (game != nullptr) {
+        if (game->gameState() == GameState::OVER) {
+            closeGame();
+        } else {
+            QMessageBox::StandardButton newGameRetVal = QMessageBox::question(
+                        this,
+                        "Nouvelle partie",
+                        "Êtes-vous sûr de vouloir commencer une nouvelle partie ?",
+                        QMessageBox::Yes | QMessageBox::No);
+            if (newGameRetVal == QMessageBox::Yes) {
+                closeGame();
+            } else {
+                return;
+            }
+        }
+    }
     if (game == nullptr) {
         game = new Game();
     } else {
@@ -112,3 +131,13 @@ void MainWindow::help()
 
 }
 
+void MainWindow::rollDice()
+{
+    if (gameObserver != nullptr) {
+        try {
+            gameObserver->rollDice();
+        } catch (std::runtime_error const &e) {
+            setStatusTip(QString::fromStdString(e.what()));
+        }
+    }
+}

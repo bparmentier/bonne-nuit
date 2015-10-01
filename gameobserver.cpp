@@ -20,6 +20,7 @@ void GameObserver::rafraichir(SujetDObservation *sdo)
         return;
     }
 
+    updateRedPawns();
 }
 
 void GameObserver::drawPawns(float xcenter, float ycenter, float radius, int pawnNumber)
@@ -77,7 +78,8 @@ void GameObserver::drawStarPawns(float xcenter, float ycenter,
 
 void GameObserver::updateRedPawns()
 {
-
+    QGraphicsEllipseItem *drop = redPawns.at(_game->dropPosition());
+    drop->setBrush(QBrush(QColor(Qt::blue)));
 }
 
 void GameObserver::updateStarPawns()
@@ -97,4 +99,13 @@ void GameObserver::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void GameObserver::keyPressEvent(QKeyEvent *event)
 {
 
+}
+
+void GameObserver::rollDice()
+{
+    try {
+    _game->rollDice();
+    } catch (std::runtime_error const &e) {
+        throw;
+    }
 }
