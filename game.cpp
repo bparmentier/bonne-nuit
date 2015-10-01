@@ -76,6 +76,7 @@ unsigned Game::rollDice()
     }
     unsigned dice = rand() % 3 + 1;
     _dropPosition = (_dropPosition + dice) % 9;
+    notifierChangement();
     return dice;
 }
 
@@ -100,6 +101,8 @@ void Game::placePiece(unsigned column)
     if (_playCount == (_players.size() * 3)) { // each player plays 3 times
         _gameState = GameState::SECOND_STAGE;
     }
+
+    notifierChangement();
 }
 
 void Game::turnLightOff()
@@ -116,6 +119,8 @@ void Game::turnLightOff()
         }
     }
     _isLightOn = false;
+
+    notifierChangement();
 }
 
 void Game::turnLightOn()
@@ -124,6 +129,8 @@ void Game::turnLightOn()
         throw std::runtime_error("Game is over");
     }
     _isLightOn = true;
+
+    notifierChangement();
 }
 
 void Game::reversePiece(unsigned line, unsigned column)
@@ -143,6 +150,8 @@ void Game::reversePiece(unsigned line, unsigned column)
         _gameState = GameState::OVER;
         findLastStar();
     }
+
+    notifierChangement();
 }
 
 void Game::findLastStar()

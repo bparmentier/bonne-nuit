@@ -104,7 +104,7 @@ void GameObserver::keyPressEvent(QKeyEvent *event)
 void GameObserver::rollDice()
 {
     try {
-    _game->rollDice();
+        _game->rollDice();
     } catch (std::runtime_error const &e) {
         throw;
     }
