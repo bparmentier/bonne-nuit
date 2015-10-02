@@ -27,13 +27,11 @@ private:
     void updateRedPawns();
     void updateStarPawns();
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
-    void keyPressEvent(QKeyEvent *event);
 
 public:
     GameObserver(Game *game, QWidget *parent = 0);
     ~GameObserver();
     void rafraichir(SujetDObservation *sdo);
-    void rollDice();
 };
 
 #endif // GAMEOBSERVER_H

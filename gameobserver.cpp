@@ -20,15 +20,21 @@ void GameObserver::rafraichir(SujetDObservation *sdo)
         return;
     }
 
+    if (_game->gameState() == GameState::SECOND_STAGE) {
+
+    }
     updateRedPawns();
     updateStarPawns();
+    if (!_game->isLightOn()) {
+
+    }
 }
 
 void GameObserver::drawPawns(float xcenter, float ycenter, float radius, int pawnNumber)
 {
     int x, y;
     float angle;
-    int pawnDiameter = 20;
+    int pawnDiameter = 40;
 
     QPen pen{QPen(Qt::black)};
     QBrush redBrush{QBrush(QColor(Qt::red))};
@@ -49,7 +55,7 @@ void GameObserver::drawPawns(float xcenter, float ycenter, float radius, int paw
 
         redPawns.push_back(pawn);
 
-        drawStarPawns(x + (pawnDiameter / 2), y + (pawnDiameter / 2), 30, 5, i);
+        drawStarPawns(x + (pawnDiameter / 2), y + (pawnDiameter / 2), 40, 5, i);
     }
 
     addEllipse(0, 0, 2, 2);
@@ -60,7 +66,7 @@ void GameObserver::drawStarPawns(float xcenter, float ycenter,
 {
     int x, y;
     float angle;
-    int pawnDiameter = 10;
+    int pawnDiameter = 30;
 
     QPen pen{QPen(Qt::black)};
     QCursor pointingHandCursor{QCursor(Qt::PointingHandCursor)};
@@ -121,24 +127,29 @@ void GameObserver::updateStarPawns()
             Piece piece = _game->board().at(redPawnIndice).at(starPawnIndice);
             QGraphicsEllipseItem *pawn = starPawns.at(redPawnIndice).at(starPawnIndice);
 
-            switch (piece.color()) {
-            case Color::BLACK:
+            if (piece.isStarOn()) {
                 pawn->setBrush(QBrush(QColor(Qt::black)));
-                break;
-            case Color::BLUE:
-                pawn->setBrush(QBrush(QColor(Qt::blue)));
-                break;
-            case Color::GREEN:
-                pawn->setBrush(QBrush(QColor(Qt::green)));
-                break;
-            case Color::PURPLE:
-                pawn->setBrush(QBrush(QColor(Qt::darkMagenta)));
-                break;
-            case Color::RED:
-                pawn->setBrush(QBrush(QColor(Qt::red)));
-                break;
-            default:
-                pawn->setBrush(Qt::NoBrush);
+                pawn->setPen(QPen(Qt::white));
+            } else {
+                switch (piece.color()) {
+                case Color::BLACK:
+                    pawn->setBrush(QBrush(QColor(Qt::black)));
+                    break;
+                case Color::BLUE:
+                    pawn->setBrush(QBrush(QColor(Qt::blue)));
+                    break;
+                case Color::GREEN:
+                    pawn->setBrush(QBrush(QColor(Qt::green)));
+                    break;
+                case Color::PURPLE:
+                    pawn->setBrush(QBrush(QColor(Qt::darkMagenta)));
+                    break;
+                case Color::RED:
+                    pawn->setBrush(QBrush(QColor(Qt::red)));
+                    break;
+                default:
+                    pawn->setBrush(Qt::NoBrush);
+                }
             }
         }
     }
@@ -151,30 +162,36 @@ void GameObserver::mousePressEvent(QGraphicsSceneMouseEvent *event)
                                  event->lastScenePos().y(),
                                  QTransform());
 
-    if (!(item->data(KEY_RED_PAWN_INDICE).toString().isEmpty())
-            && !(item->data(KEY_STAR_PAWN_INDICE).toString().isEmpty())) {
-        if (item->data(KEY_RED_PAWN_INDICE).toInt() == _game->dropPosition()) {
+    bool isRedPawnIndiceEmpty = item->data(KEY_RED_PAWN_INDICE).toString().isEmpty();
+    bool isStarPawnIndiceEmpty = item->data(KEY_STAR_PAWN_INDICE).toString().isEmpty();
+
+    if (_game->gameState() == GameState::FIRST_STAGE) {
+        if (!isRedPawnIndiceEmpty && !isStarPawnIndiceEmpty) {
+            int redPawnIndice = item->data(KEY_RED_PAWN_INDICE).toInt();
+            if (redPawnIndice == _game->dropPosition()) {
+                try {
+                    _game->placePiece(item->data(KEY_STAR_PAWN_INDICE).toInt());
+                } catch (std::runtime_error const &e) {
+                    throw e;
+                } catch (std::invalid_argument const &e) {
+                    throw e;
+                }
+            }
+        }
+    }
+    if (_game->gameState() == GameState::SECOND_STAGE) {
+        if (!isRedPawnIndiceEmpty && !isStarPawnIndiceEmpty) {
+            int redPawnIndice = item->data(KEY_RED_PAWN_INDICE).toInt();
+            int starPawnIndice = item->data(KEY_STAR_PAWN_INDICE).toInt();
+
             try {
-                _game->placePiece(item->data(KEY_STAR_PAWN_INDICE).toInt());
+                _game->reversePiece(redPawnIndice, starPawnIndice);
             } catch (std::runtime_error const &e) {
                 throw e;
             } catch (std::invalid_argument const &e) {
                 throw e;
             }
+
         }
-    }
-}
-
-void GameObserver::keyPressEvent(QKeyEvent *event)
-{
-
-}
-
-void GameObserver::rollDice()
-{
-    try {
-        _game->rollDice();
-    } catch (std::runtime_error const &e) {
-        throw;
     }
 }

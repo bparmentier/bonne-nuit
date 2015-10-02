@@ -37,12 +37,15 @@ void MainWindow::connection()
             this, &MainWindow::help);
     connect(ui->rollDiceButton, &QPushButton::released,
             this, &MainWindow::rollDice);
+    connect(ui->switchLightButton, &QPushButton::released,
+            this, &MainWindow::switchLight);
 }
 
 void MainWindow::setObserver()
 {
     gameObserver = new GameObserver(game, this);
     ui->graphicsView->setScene(gameObserver);
+    ui->rollDiceButton->setEnabled(true);
 }
 
 void MainWindow::newGame()
@@ -133,10 +136,31 @@ void MainWindow::help()
 
 void MainWindow::rollDice()
 {
-    if (gameObserver != nullptr) {
+    if (game != nullptr) {
         try {
-            gameObserver->rollDice();
+            game->rollDice();
         } catch (std::runtime_error const &e) {
+            setStatusTip(QString::fromStdString(e.what()));
+        } catch (std::invalid_argument const &e) {
+            setStatusTip(QString::fromStdString(e.what()));
+        }
+    }
+}
+
+void MainWindow::switchLight()
+{
+    if (game != nullptr) {
+        try {
+            if (game->isLightOn()) {
+                game->turnLightOff();
+            } else {
+                game->turnLightOn();
+            }
+        } catch (std::runtime_error const &e) {
+            setStatusTip(QString::fromStdString(e.what()));
+        } catch (std::invalid_argument const &e) {
+            setStatusTip(QString::fromStdString(e.what()));
+        } catch (std::out_of_range const &e) {
             setStatusTip(QString::fromStdString(e.what()));
         }
     }

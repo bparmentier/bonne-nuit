@@ -32,6 +32,7 @@ private slots:
     void closeGame();
     void help();
     void rollDice();
+    void switchLight();
 };
 
 #endif // MAINWINDOW_H
