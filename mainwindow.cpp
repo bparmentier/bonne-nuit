@@ -57,8 +57,8 @@ void MainWindow::newGame()
         } else {
             QMessageBox::StandardButton newGameRetVal = QMessageBox::question(
                         this,
-                        "Nouvelle partie",
-                        "Êtes-vous sûr de vouloir commencer une nouvelle partie ?",
+                        "New game",
+                        "Are you sure you want to start a new game?",
                         QMessageBox::Yes | QMessageBox::No);
             if (newGameRetVal == QMessageBox::Yes) {
                 closeGame();
