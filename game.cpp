@@ -74,8 +74,12 @@ unsigned Game::rollDice()
         throw std::runtime_error("Launching the dice is only possible "
                                      "during the first stage of the game");
     }
+    if (_actionToPerform != GameAction::WAITING_FOR_DICE) {
+        throw std::runtime_error("Not waiting for dice roll");
+    }
     unsigned dice = rand() % 3 + 1;
     _dropPosition = (_dropPosition + dice) % 9;
+    _actionToPerform = GameAction::WAITING_FOR_PIECE;
     notifierChangement();
     return dice;
 }
@@ -95,11 +99,16 @@ void Game::placePiece(unsigned column)
     if (_board.at(_dropPosition).at(column).color() != Color::EMPTY) {
         throw std::invalid_argument("Not empty");
     }
+    if (_actionToPerform != GameAction::WAITING_FOR_PIECE) {
+        throw std::runtime_error("Cannot place piece");
+    }
     _board.at(_dropPosition).at(column) = Piece(currentPlayer(), false);
     _currentPlayer = (_currentPlayer + 1) % _players.size();
     _playCount++;
+    _actionToPerform = GameAction::WAITING_FOR_DICE;
     if (_playCount == (_players.size() * 3)) { // each player plays 3 times
         _gameState = GameState::SECOND_STAGE;
+        _actionToPerform = GameAction::WAITING_FOR_REVERSE;
     }
 
     notifierChangement();
