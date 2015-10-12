@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     piece.cpp \
     gameobserver.cpp \
     o_sdo/sujetdobservation.cpp \
-    qstarpawn.cpp
+    qstarpawn.cpp \
+    gameconfigdialog.cpp
 
 HEADERS  += mainwindow.h \
     o_sdo/observateur.h \
@@ -30,9 +31,11 @@ HEADERS  += mainwindow.h \
     gameaction.h \
     gameobserver.h \
     o_sdo/sujetdobservation.h \
-    qstarpawn.h
+    qstarpawn.h \
+    gameconfigdialog.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    gameconfigdialog.ui
 
 RESOURCES += \
     resources.qrc
