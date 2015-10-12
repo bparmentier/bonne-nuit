@@ -25,8 +25,8 @@ private:
     std::vector<std::vector<QStarPawn *>> starPawns;
     QGraphicsSvgItem *drop;
 
-    void drawPawns(float xcenter, float ycenter, float radius, int pawnNumber);
-    void drawStarPawns(float xcenter, float ycenter, float radius, int pawnNumber, int redPawnIndex);
+    void drawPawns(float xcenter, float ycenter, float radius, unsigned pawnNumber);
+    void drawStarPawns(float xcenter, float ycenter, float radius, unsigned pawnNumber, unsigned redPawnIndex);
     void updateRedPawns();
     void updateStarPawns();
     void updateBackground();

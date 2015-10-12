@@ -29,7 +29,7 @@ void GameObserver::rafraichir(SujetDObservation *sdo)
     updateBackground();
 }
 
-void GameObserver::drawPawns(float xcenter, float ycenter, float radius, int pawnNumber)
+void GameObserver::drawPawns(float xcenter, float ycenter, float radius, unsigned pawnNumber)
 {
     int x, y;
     float angle;
@@ -40,7 +40,7 @@ void GameObserver::drawPawns(float xcenter, float ycenter, float radius, int paw
     drop = new QGraphicsSvgItem(":/resources/drop.svg");
     drop->setScale(0.155);
 
-    for (auto i = 0; i < pawnNumber; i++) {
+    for (unsigned i = 0; i < pawnNumber; i++) {
         angle = i * (2.0f * M_PI / pawnNumber);
         x = xcenter + cosf(angle) * radius - (pawnDiameter / 2);
         y = ycenter + sinf(angle) * radius - (pawnDiameter / 2);
@@ -60,7 +60,7 @@ void GameObserver::drawPawns(float xcenter, float ycenter, float radius, int paw
 }
 
 void GameObserver::drawStarPawns(float xcenter, float ycenter,
-                                 float radius, int pawnNumber, int redPawnIndex)
+                                 float radius, unsigned pawnNumber, unsigned redPawnIndex)
 {
     int x, y;
     float angle;
@@ -69,7 +69,7 @@ void GameObserver::drawStarPawns(float xcenter, float ycenter,
     QCursor pointingHandCursor{QCursor(Qt::PointingHandCursor)};
     std::vector<QStarPawn *> pawnGroup;
 
-    for (auto i = 0; i < pawnNumber; i++) {
+    for (unsigned i = 0; i < pawnNumber; i++) {
         angle = i * (2.0f * M_PI / pawnNumber);
         x = xcenter + cosf(angle) * radius - pawnDiameter / 2;
         y = ycenter + sinf(angle) * radius - pawnDiameter / 2;
@@ -111,7 +111,7 @@ void GameObserver::updateRedPawns()
 {
     unsigned dropPosition = _game->dropPosition();
 
-    for (auto i = 0; i < 9; ++i) {
+    for (unsigned i = 0; i < 9; ++i) {
         QGraphicsEllipseItem *pawn = redPawns.at(i);
         if (dropPosition == i) {
             drop->setPos(pawn->pos());
@@ -121,8 +121,8 @@ void GameObserver::updateRedPawns()
 
 void GameObserver::updateStarPawns()
 {
-    for (auto redPawnIndice = 0; redPawnIndice < 9; ++redPawnIndice) {
-        for (auto starPawnIndice = 0; starPawnIndice < 5; ++starPawnIndice) {
+    for (unsigned redPawnIndice = 0; redPawnIndice < 9; ++redPawnIndice) {
+        for (unsigned starPawnIndice = 0; starPawnIndice < 5; ++starPawnIndice) {
             Piece piece = _game->board().at(redPawnIndice).at(starPawnIndice);
             QStarPawn *pawn = starPawns.at(redPawnIndice).at(starPawnIndice);
 
@@ -183,7 +183,7 @@ void GameObserver::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
     if (_game->gameState() == GameState::FIRST_STAGE) {
         if (!isRedPawnIndiceEmpty && !isStarPawnIndiceEmpty) {
-            int redPawnIndice = item->data(KEY_RED_PAWN_INDICE).toInt();
+            unsigned redPawnIndice = item->data(KEY_RED_PAWN_INDICE).toInt();
             if (redPawnIndice == _game->dropPosition()) {
                 try {
                     _game->placePiece(item->data(KEY_STAR_PAWN_INDICE).toInt());

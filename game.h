@@ -15,7 +15,7 @@ class Game : public SujetDObservation
 private:
     std::vector<std::vector<Piece>> _board;
     std::vector<Color> _players;
-    int _dropPosition;
+    unsigned _dropPosition;
     bool _isLightOn;
     Color _winner;
     GameState _gameState;
