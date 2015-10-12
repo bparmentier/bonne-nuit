@@ -1,9 +1,13 @@
 #include "piece.h"
 
 Piece::Piece(Color color, bool isStarOn) :
-    _color(color),
-    _isStarOn(isStarOn)
+    _isGlowingInTheDark(false)
 {
+    if (color == Color::EMPTY && isStarOn == true) {
+        throw std::invalid_argument("An empty piece cannot have its star on");
+    }
+    _color = color;
+    _isStarOn = isStarOn;
 }
 
 Color Piece::color() const
@@ -11,17 +15,12 @@ Color Piece::color() const
     return _color;
 }
 
-bool Piece::isStarOn() const
+bool Piece::isGlowingInTheDark() const
 {
-    return _isStarOn;
+    return _isGlowingInTheDark;
 }
 
-void Piece::lightUpStar()
+void Piece::setGlowingInTheDark(bool isGlowingInTheDark)
 {
-    _isStarOn = true;
-}
-
-void Piece::darkenStar()
-{
-    _isStarOn = false;
+    _isGlowingInTheDark = isGlowingInTheDark;
 }

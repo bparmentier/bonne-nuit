@@ -60,7 +60,7 @@ void Game::placeAbsentPlayersPieces(std::vector<Color> absentPlayers)
                 unsigned line = rand() % 9;
                 unsigned column = rand() % 5;
                 if (_board.at(line).at(column).color() == Color::EMPTY) {
-                    _board.at(line).at(column) = Piece(absentPlayer, false);
+                    _board.at(line).at(column) = Piece(absentPlayer, true);
                     placed = true;
                 }
             } while (placed == false);
@@ -102,7 +102,7 @@ void Game::placePiece(unsigned column)
     if (_actionToPerform != GameAction::WAITING_FOR_PIECE) {
         throw std::runtime_error("Cannot place piece");
     }
-    _board.at(_dropPosition).at(column) = Piece(currentPlayer(), false);
+    _board.at(_dropPosition).at(column) = Piece(currentPlayer(), true);
     _currentPlayer = (_currentPlayer + 1) % _players.size();
     _playCount++;
     _actionToPerform = GameAction::WAITING_FOR_DICE;
@@ -123,7 +123,7 @@ void Game::turnLightOff()
         for (auto column = 0; column < 5; ++column) {
             Piece &piece = _board.at(line).at(column);
             if (piece.color() != Color::EMPTY){
-                piece.lightUpStar();
+                piece.setGlowingInTheDark(true);
             }
         }
     }
@@ -137,6 +137,14 @@ void Game::turnLightOn()
     if (_gameState == GameState::FIRST_STAGE) {
         throw std::runtime_error("Game is over");
     }
+    for (auto line = 0; line < 9; ++line) {
+        for (auto column = 0; column < 5; ++column) {
+            Piece &piece = _board.at(line).at(column);
+            if (piece.color() != Color::EMPTY){
+                piece.setGlowingInTheDark(false);
+            }
+        }
+    }
     _isLightOn = true;
 
     notifierChangement();
@@ -148,8 +156,8 @@ void Game::reversePiece(unsigned line, unsigned column)
     if (piece.color() == Color::EMPTY) {
         throw std::invalid_argument("No piece here");
     }
-    if (piece.isStarOn()) {
-        piece.darkenStar();
+    if (piece.isGlowingInTheDark()) {
+        piece.setGlowingInTheDark(false);
         _numberOfStarsLeft -= 1;
     } else {
         throw std::runtime_error("Star is already off");
@@ -171,7 +179,7 @@ void Game::findLastStar()
     while (!lastStarFound && line < 9) {
         while (!lastStarFound && column < 5) {
             Piece piece = _board.at(line).at(column);
-            if ((piece.color() != Color::EMPTY) && piece.isStarOn()) {
+            if ((piece.color() != Color::EMPTY) && piece.isGlowingInTheDark()) {
                 _winner = piece.color();
                 lastStarFound = true;
             }
@@ -230,25 +238,25 @@ std::ostream & operator<<(std::ostream & out, const Game & in)
     for (unsigned line = 0; line < 9; line++) {
         out << line << " ";
         for (unsigned column = 0; column < 5; column++) {
-            bool isStarOn = board.at(line).at(column).isStarOn();
+            bool isGlowing = board.at(line).at(column).isGlowingInTheDark();
             switch (board.at(line).at(column).color()) {
             case Color::EMPTY:
                 out << '_';
                 break;
             case Color::BLACK:
-                out << (isStarOn ? 'A' : 'a');
+                out << (isGlowing ? 'A' : 'a');
                 break;
             case Color::BLUE:
-                out << (isStarOn ? 'B' : 'b');
+                out << (isGlowing ? 'B' : 'b');
                 break;
             case Color::GREEN:
-                out << (isStarOn ? 'C' : 'c');
+                out << (isGlowing ? 'C' : 'c');
                 break;
             case Color::PURPLE:
-                out << (isStarOn ? 'D' : 'd');
+                out << (isGlowing ? 'D' : 'd');
                 break;
             case Color::RED:
-                out << (isStarOn ? 'E' : 'e');
+                out << (isGlowing ? 'E' : 'e');
                 break;
             default:
                 out << '?';

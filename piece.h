@@ -8,13 +8,13 @@ class Piece
 public:
     Piece(Color color, bool isStarOn);
     Color color() const;
-    bool isStarOn() const;
-    void lightUpStar();
-    void darkenStar();
+    bool isGlowingInTheDark() const;
+    void setGlowingInTheDark(bool isGlowingInTheDark);
 
 private:
     Color _color;
     bool _isStarOn;
+    bool _isGlowingInTheDark;
 };
 
 #endif // PIECE_H

@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui svg
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     game.cpp \
     piece.cpp \
     gameobserver.cpp \
-    o_sdo/sujetdobservation.cpp
+    o_sdo/sujetdobservation.cpp \
+    qstarpawn.cpp
 
 HEADERS  += mainwindow.h \
     o_sdo/observateur.h \
@@ -28,6 +29,10 @@ HEADERS  += mainwindow.h \
     piece.h \
     gameaction.h \
     gameobserver.h \
-    o_sdo/sujetdobservation.h
+    o_sdo/sujetdobservation.h \
+    qstarpawn.h
 
 FORMS    += mainwindow.ui
+
+RESOURCES += \
+    resources.qrc

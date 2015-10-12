@@ -1,5 +1,6 @@
 #include "gameobserver.h"
 #include "mainwindow.h"
+#include "qstarpawn.h"
 
 GameObserver::GameObserver(Game *game, QWidget *parent) :
     QGraphicsScene{parent},
@@ -25,9 +26,7 @@ void GameObserver::rafraichir(SujetDObservation *sdo)
     }
     updateRedPawns();
     updateStarPawns();
-    if (!_game->isLightOn()) {
-
-    }
+    updateBackground();
 }
 
 void GameObserver::drawPawns(float xcenter, float ycenter, float radius, int pawnNumber)
@@ -70,16 +69,14 @@ void GameObserver::drawStarPawns(float xcenter, float ycenter,
 
     QPen pen{QPen(Qt::black)};
     QCursor pointingHandCursor{QCursor(Qt::PointingHandCursor)};
-    std::vector<QGraphicsEllipseItem *> pawnGroup;
+    std::vector<QStarPawn *> pawnGroup;
 
     for (auto i = 0; i < pawnNumber; i++) {
         angle = i * (2.0f * M_PI / pawnNumber);
         x = xcenter + cosf(angle) * radius - pawnDiameter / 2;
         y = ycenter + sinf(angle) * radius - pawnDiameter / 2;
         Piece piece = _game->board().at(redPawnIndex).at(i);
-        QGraphicsEllipseItem *pawn = addEllipse(x, y, pawnDiameter, pawnDiameter);
-        pawn->setData(KEY_RED_PAWN_INDICE, redPawnIndex);
-        pawn->setData(KEY_STAR_PAWN_INDICE, i);
+        QStarPawn *pawn = new QStarPawn(x, y, pawnDiameter, pawnDiameter);
 
         switch (piece.color()) {
         case Color::BLACK:
@@ -98,10 +95,14 @@ void GameObserver::drawStarPawns(float xcenter, float ycenter,
             pawn->setBrush(QBrush(QColor(Qt::red)));
             break;
         default:
+            pawn->setStarOn(false);
             pawn->setBrush(Qt::NoBrush);
         }
 
+        pawn->setData(KEY_RED_PAWN_INDICE, redPawnIndex);
+        pawn->setData(KEY_STAR_PAWN_INDICE, i);
         pawn->setCursor(pointingHandCursor);
+        addItem(pawn);
         pawnGroup.push_back(pawn);
     }
     starPawns.push_back(pawnGroup);
@@ -123,14 +124,13 @@ void GameObserver::updateStarPawns()
 {
     for (auto redPawnIndice = 0; redPawnIndice < 9; ++redPawnIndice) {
         for (auto starPawnIndice = 0; starPawnIndice < 5; ++starPawnIndice) {
-
             Piece piece = _game->board().at(redPawnIndice).at(starPawnIndice);
-            QGraphicsEllipseItem *pawn = starPawns.at(redPawnIndice).at(starPawnIndice);
+            QStarPawn *pawn = starPawns.at(redPawnIndice).at(starPawnIndice);
 
-            if (piece.isStarOn()) {
-                pawn->setBrush(QBrush(QColor(Qt::black)));
-                pawn->setPen(QPen(Qt::white));
-            } else {
+            if (_game->isLightOn()) {
+                if (piece.color() != Color::EMPTY) {
+                    pawn->setStarOn(true);
+                }
                 switch (piece.color()) {
                 case Color::BLACK:
                     pawn->setBrush(QBrush(QColor(Qt::black)));
@@ -150,8 +150,25 @@ void GameObserver::updateStarPawns()
                 default:
                     pawn->setBrush(Qt::NoBrush);
                 }
+            } else {
+                if (piece.isGlowingInTheDark()) {
+                    pawn->setStarOn(true);
+                    pawn->setBrush(QBrush(QColor(Qt::black)));
+                    pawn->setPen(QPen(Qt::white));
+                } else {
+                    pawn->setStarOn(false);
+                }
             }
         }
+    }
+}
+
+void GameObserver::updateBackground()
+{
+    if (!_game->isLightOn()) {
+        setBackgroundBrush(QBrush(QColor(Qt::black)));
+    } else {
+        setBackgroundBrush(QBrush(QColor(Qt::white)));
     }
 }
 
@@ -172,9 +189,9 @@ void GameObserver::mousePressEvent(QGraphicsSceneMouseEvent *event)
                 try {
                     _game->placePiece(item->data(KEY_STAR_PAWN_INDICE).toInt());
                 } catch (std::runtime_error const &e) {
-                    throw e;
+                    //throw e;
                 } catch (std::invalid_argument const &e) {
-                    throw e;
+                    //throw e;
                 }
             }
         }
@@ -187,9 +204,9 @@ void GameObserver::mousePressEvent(QGraphicsSceneMouseEvent *event)
             try {
                 _game->reversePiece(redPawnIndice, starPawnIndice);
             } catch (std::runtime_error const &e) {
-                throw e;
+                //throw e;
             } catch (std::invalid_argument const &e) {
-                throw e;
+                //throw e;
             }
 
         }

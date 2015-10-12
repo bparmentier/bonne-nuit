@@ -7,6 +7,7 @@
 
 #include "o_sdo/observateur.h"
 #include "game.h"
+#include "qstarpawn.h"
 
 class Game;
 
@@ -20,12 +21,13 @@ private:
 
     Game *_game;
     std::vector<QGraphicsEllipseItem *> redPawns;
-    std::vector<std::vector<QGraphicsEllipseItem *>> starPawns;
+    std::vector<std::vector<QStarPawn *>> starPawns;
 
     void drawPawns(float xcenter, float ycenter, float radius, int pawnNumber);
     void drawStarPawns(float xcenter, float ycenter, float radius, int pawnNumber, int redPawnIndex);
     void updateRedPawns();
     void updateStarPawns();
+    void updateBackground();
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
 public:
