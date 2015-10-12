@@ -37,8 +37,8 @@ void GameObserver::drawPawns(float xcenter, float ycenter, float radius, int paw
 
     QPen pen{QPen(Qt::black)};
     QBrush redBrush{QBrush(QColor(Qt::red))};
-    QBrush blueBrush{QBrush(QColor(Qt::blue))};
-    QCursor pointingHandCursor{QCursor(Qt::PointingHandCursor)};
+    drop = new QGraphicsSvgItem(":/resources/drop.svg");
+    drop->setScale(0.155);
 
     for (auto i = 0; i < pawnNumber; i++) {
         angle = i * (2.0f * M_PI / pawnNumber);
@@ -46,18 +46,17 @@ void GameObserver::drawPawns(float xcenter, float ycenter, float radius, int paw
         y = ycenter + sinf(angle) * radius - (pawnDiameter / 2);
         QGraphicsEllipseItem *pawn;
         pawn->setData(123, i);
+        pawn = addEllipse(0, 0, pawnDiameter, pawnDiameter, pen, redBrush);
+        pawn->setPos(x, y);
         if (_game->dropPosition() == i) {
-            pawn = addEllipse(x, y, pawnDiameter, pawnDiameter, pen, blueBrush);
-        } else {
-            pawn = addEllipse(x, y, pawnDiameter, pawnDiameter, pen, redBrush);
+            drop->setPos(x, y);
         }
 
         redPawns.push_back(pawn);
 
         drawStarPawns(x + (pawnDiameter / 2), y + (pawnDiameter / 2), 40, 5, i);
     }
-
-    addEllipse(0, 0, 2, 2);
+    addItem(drop);
 }
 
 void GameObserver::drawStarPawns(float xcenter, float ycenter,
@@ -67,7 +66,6 @@ void GameObserver::drawStarPawns(float xcenter, float ycenter,
     float angle;
     int pawnDiameter = 30;
 
-    QPen pen{QPen(Qt::black)};
     QCursor pointingHandCursor{QCursor(Qt::PointingHandCursor)};
     std::vector<QStarPawn *> pawnGroup;
 
@@ -76,7 +74,8 @@ void GameObserver::drawStarPawns(float xcenter, float ycenter,
         x = xcenter + cosf(angle) * radius - pawnDiameter / 2;
         y = ycenter + sinf(angle) * radius - pawnDiameter / 2;
         Piece piece = _game->board().at(redPawnIndex).at(i);
-        QStarPawn *pawn = new QStarPawn(x, y, pawnDiameter, pawnDiameter);
+        QStarPawn *pawn = new QStarPawn(0, 0, pawnDiameter, pawnDiameter);
+        pawn->setPos(x, y);
 
         switch (piece.color()) {
         case Color::BLACK:
@@ -110,13 +109,13 @@ void GameObserver::drawStarPawns(float xcenter, float ycenter,
 
 void GameObserver::updateRedPawns()
 {
-    QBrush redBrush{QBrush(QColor(Qt::red))};
-    QBrush blueBrush{QBrush(QColor(Qt::blue))};
     unsigned dropPosition = _game->dropPosition();
 
     for (auto i = 0; i < 9; ++i) {
         QGraphicsEllipseItem *pawn = redPawns.at(i);
-        pawn->setBrush((i == dropPosition) ? blueBrush : redBrush);
+        if (dropPosition == i) {
+            drop->setPos(pawn->pos());
+        }
     }
 }
 
