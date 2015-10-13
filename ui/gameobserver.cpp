@@ -131,8 +131,18 @@ void GameObserver::updateStarPawns()
             QStarPawn *pawn = starPawns.at(redPawnIndice).at(starPawnIndice);
 
             if (_game->isLightOn()) {
-                if (piece.color() != Color::EMPTY) {
-                    pawn->setStarOn(true);
+                if (_game->gameState() == GameState::OVER) {
+                    int line = _game->lastPawnCoordinates().first;
+                    int column = _game->lastPawnCoordinates().second;
+
+                    if (static_cast<int>(redPawnIndice) == line
+                            && static_cast<int>(starPawnIndice) == column) {
+                        pawn->setStarOn(true);
+                    }
+                } else {
+                    if (piece.color() != Color::EMPTY) {
+                        pawn->setStarOn(true);
+                    }
                 }
                 switch (piece.color()) {
                 case Color::BLACK:
@@ -153,6 +163,7 @@ void GameObserver::updateStarPawns()
                 default:
                     pawn->setBrush(Qt::NoBrush);
                 }
+                pawn->setPen(QPen(Qt::black));
             } else {
                 if (piece.isGlowingInTheDark()) {
                     pawn->setStarOn(true);
@@ -164,6 +175,7 @@ void GameObserver::updateStarPawns()
             }
         }
     }
+
 }
 
 void GameObserver::updateBackground()

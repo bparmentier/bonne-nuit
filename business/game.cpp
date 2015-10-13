@@ -17,6 +17,7 @@ Game::Game(unsigned playersNumber) :
     _dropPosition(0),
     _isLightOn(true),
     _winner(Color::EMPTY),
+    _lastPawnCoordinates(-1, -1),
     _gameState(GameState::FIRST_STAGE),
     _playCount(0),
     _actionToPerform(GameAction::WAITING_FOR_DICE),
@@ -116,8 +117,9 @@ void Game::placePiece(unsigned column)
 
 void Game::turnLightOff()
 {
-    if (_gameState == GameState::FIRST_STAGE) {
-        throw std::runtime_error("Cannot turn light off during first stage");
+    if (_gameState != GameState::SECOND_STAGE) {
+        throw std::runtime_error("Turning light off is only possible during the"
+                                 " second stage");
     }
     for (auto line = 0; line < 9; ++line) {
         for (auto column = 0; column < 5; ++column) {
@@ -134,16 +136,8 @@ void Game::turnLightOff()
 
 void Game::turnLightOn()
 {
-    if (_gameState == GameState::FIRST_STAGE) {
-        throw std::runtime_error("Game is over");
-    }
-    for (auto line = 0; line < 9; ++line) {
-        for (auto column = 0; column < 5; ++column) {
-            Piece &piece = _board.at(line).at(column);
-            if (piece.color() != Color::EMPTY){
-                piece.setGlowingInTheDark(false);
-            }
-        }
+    if (_gameState != GameState::OVER) {
+        throw std::runtime_error("Game is not over");
     }
     _isLightOn = true;
 
@@ -175,12 +169,12 @@ void Game::findLastStar()
 {
     bool lastStarFound = false;
     unsigned line = 0;
-    unsigned column = 0;
     while (!lastStarFound && line < 9) {
+        unsigned column = 0;
         while (!lastStarFound && column < 5) {
             Piece piece = _board.at(line).at(column);
             if ((piece.color() != Color::EMPTY) && piece.isGlowingInTheDark()) {
-                _winner = piece.color();
+                _lastPawnCoordinates = {line, column};
                 lastStarFound = true;
             }
             column++;
@@ -228,6 +222,12 @@ bool Game::isLightOn() const
 {
     return _isLightOn;
 }
+
+const std::pair<int, int> Game::lastPawnCoordinates() const
+{
+    return _lastPawnCoordinates;
+}
+
 
 std::ostream & operator<<(std::ostream & out, const Game & in)
 {

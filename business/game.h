@@ -26,6 +26,7 @@ private:
     unsigned _dropPosition;
     bool _isLightOn;
     Color _winner;
+    std::pair<int, int> _lastPawnCoordinates;
     GameState _gameState;
     unsigned _playCount;
     GameAction _actionToPerform;
@@ -149,6 +150,13 @@ public:
      * \return `true` if the light is turned on, `false` otherwise
      */
     bool isLightOn() const;
+
+    /*!
+     * \brief Returns last pawn coordinates. The *first* member is the line and
+     * the *second* member is the column.
+     * \return last pawn coordinates
+     */
+    const std::pair<int, int> lastPawnCoordinates() const;
 };
 
 /*!
