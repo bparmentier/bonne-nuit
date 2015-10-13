@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 
-#include "game.h"
+#include "business/game.h"
 #include "gameobserver.h"
 
 namespace Ui {

@@ -7,7 +7,7 @@
 #include <QGraphicsSvgItem>
 
 #include "o_sdo/observateur.h"
-#include "game.h"
+#include "business/game.h"
 #include "qstarpawn.h"
 
 class Game;

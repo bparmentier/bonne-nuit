@@ -15,24 +15,24 @@ CONFIG += c++11
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    game.cpp \
-    piece.cpp \
+    business/piece.cpp \
     gameobserver.cpp \
     o_sdo/sujetdobservation.cpp \
     qstarpawn.cpp \
-    gameconfigdialog.cpp
+    gameconfigdialog.cpp \
+    business/game.cpp
 
 HEADERS  += mainwindow.h \
     o_sdo/observateur.h \
-    game.h \
-    color.h \
-    gamestate.h \
-    piece.h \
-    gameaction.h \
+    business/color.h \
+    business/gamestate.h \
+    business/piece.h \
+    business/gameaction.h \
     gameobserver.h \
     o_sdo/sujetdobservation.h \
     qstarpawn.h \
-    gameconfigdialog.h
+    gameconfigdialog.h \
+    business/game.h
 
 FORMS    += mainwindow.ui \
     gameconfigdialog.ui
