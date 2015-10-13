@@ -8,9 +8,11 @@
 
 GameObserver::GameObserver(Game *game, QWidget *parent) :
     QGraphicsScene{parent},
-    _game{game}
+    _game{game},
+    background{QBrush(QPixmap(":/resources/background_texture.png"))}
 {
     _game->attacher(this);
+    setBackgroundBrush(background);
     drawPawns(0, 0, 200, 9);
 }
 
@@ -24,16 +26,16 @@ void GameObserver::rafraichir(SujetDObservation *sdo)
     if (sdo != _game) {
         return;
     }
-
-    if (_game->gameState() == GameState::SECOND_STAGE) {
-
+    if (_game->gameState() == GameState::SECOND_STAGE
+            || _game->gameState() == GameState::OVER) {
+        updateBackground();
     }
     updateRedPawns();
     updateStarPawns();
-    updateBackground();
 }
 
-void GameObserver::drawPawns(float xcenter, float ycenter, float radius, unsigned pawnNumber)
+void GameObserver::drawPawns(float xcenter, float ycenter, float radius,
+                             unsigned pawnNumber)
 {
     int x, y;
     float angle;
@@ -64,7 +66,8 @@ void GameObserver::drawPawns(float xcenter, float ycenter, float radius, unsigne
 }
 
 void GameObserver::drawStarPawns(float xcenter, float ycenter,
-                                 float radius, unsigned pawnNumber, unsigned redPawnIndex)
+                                 float radius, unsigned pawnNumber,
+                                 unsigned redPawnIndex)
 {
     int x, y;
     float angle;
@@ -183,7 +186,7 @@ void GameObserver::updateBackground()
     if (!_game->isLightOn()) {
         setBackgroundBrush(QBrush(QColor(Qt::black)));
     } else {
-        setBackgroundBrush(QBrush(QColor(Qt::white)));
+        setBackgroundBrush(background);
     }
 }
 

@@ -32,6 +32,7 @@ private:
     std::vector<QGraphicsEllipseItem *> redPawns;
     std::vector<std::vector<QStarPawn *>> starPawns;
     QGraphicsSvgItem *drop;
+    QBrush background;
 
     void drawPawns(float xcenter, float ycenter, float radius, unsigned pawnNumber);
     void drawStarPawns(float xcenter, float ycenter, float radius, unsigned pawnNumber, unsigned redPawnIndex);

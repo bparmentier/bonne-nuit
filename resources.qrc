@@ -2,5 +2,6 @@
     <qresource prefix="/resources">
         <file alias="star.svg">resources/star.svg</file>
         <file alias="drop.svg">resources/drop.svg</file>
+        <file alias="background_texture.png">resources/seamless_paper_texture.png</file>
     </qresource>
 </RCC>
