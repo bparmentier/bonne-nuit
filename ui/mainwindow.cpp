@@ -9,7 +9,8 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    game(nullptr)
+    game(nullptr),
+    gameObserver(nullptr)
 {
     ui->setupUi(this);
 
