@@ -1,5 +1,7 @@
 #include "piece.h"
 
+#include <stdexcept>
+
 Piece::Piece(Color color, bool isStarOn) :
     _isGlowingInTheDark(false)
 {
