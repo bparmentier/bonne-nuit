@@ -1,3 +1,8 @@
+/*!
+ * \file gameobserver.h
+ * \brief GameObserver class definition
+ */
+
 #ifndef GAMEOBSERVER_H
 #define GAMEOBSERVER_H
 
@@ -12,6 +17,9 @@
 
 class Game;
 
+/*!
+ * \brief A graphical representation of the game
+ */
 class GameObserver : public QGraphicsScene, public Observateur
 {
 private:
@@ -33,8 +41,23 @@ private:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
 public:
+    /*!
+     * \brief Constructs a game observer with the given *game*. *parent* is
+     * passed to QGraphicsScene's constructor.
+     * \param game the game
+     * \param parent the parent widget
+     */
     GameObserver(Game *game, QWidget *parent = 0);
+
+    /*!
+     * \brief Destroys the game observer
+     */
     ~GameObserver();
+
+    /*!
+     * \brief Refresh the observer when the game state changes
+     * \param sdo the subject
+     */
     void rafraichir(SujetDObservation *sdo);
 };
 
