@@ -2,6 +2,10 @@
 #include "mainwindow.h"
 #include "qstarpawn.h"
 
+#ifndef M_PI
+#define M_PI 3.1415926535
+#endif
+
 GameObserver::GameObserver(Game *game, QWidget *parent) :
     QGraphicsScene{parent},
     _game{game}
