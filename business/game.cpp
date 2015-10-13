@@ -84,7 +84,7 @@ unsigned Game::rollDice()
 {
     if (_gameState == GameState::SECOND_STAGE) {
         throw std::runtime_error("Launching the dice is only possible "
-                                     "during the first stage of the game");
+                                 "during the first stage of the game");
     }
     if (_actionToPerform != GameAction::WAITING_FOR_DICE) {
         throw std::runtime_error("Not waiting for dice roll");
@@ -102,8 +102,8 @@ void Game::placePiece(unsigned column)
         throw std::runtime_error("Game is over");
     }
     if (_gameState == GameState::SECOND_STAGE) {
-        throw std::runtime_error("Cannot place piece during the second "
-                                     "stage of the game");
+        throw std::runtime_error("Cannot place piece during the second stage "
+                                 "of the game");
     }
     if (column > 4) {
         throw std::out_of_range("Column must be between 0 and 4");
@@ -129,8 +129,8 @@ void Game::placePiece(unsigned column)
 void Game::turnLightOff()
 {
     if (_gameState != GameState::SECOND_STAGE) {
-        throw std::runtime_error("Turning light off is only possible during the"
-                                 " second stage");
+        throw std::runtime_error("Turning light off is only possible during "
+                                 "the second stage");
     }
     for (auto line = 0; line < 9; ++line) {
         for (auto column = 0; column < 5; ++column) {
@@ -148,7 +148,8 @@ void Game::turnLightOff()
 void Game::turnLightOn()
 {
     if (_gameState != GameState::OVER) {
-        throw std::runtime_error("Game is not over");
+        throw std::runtime_error("Turning light on is only possible when game "
+                                 "is over");
     }
     _isLightOn = true;
 
@@ -158,14 +159,15 @@ void Game::turnLightOn()
 void Game::reversePiece(unsigned line, unsigned column)
 {
     if (_gameState == GameState::FIRST_STAGE) {
-        throw std::runtime_error("Cannot reverse piece during first stage");
+        throw std::runtime_error("Cannot reverse piece during first stage of "
+                                 "the game");
     }
     if (_gameState == GameState::OVER) {
-        throw std::runtime_error("Game is over");
+        throw std::runtime_error("Cannot reverse piece when game is over");
     }
     Piece &piece = _board.at(line).at(column);
     if (piece.color() == Color::EMPTY) {
-        throw std::invalid_argument("No piece here");
+        throw std::invalid_argument("No piece to reverse here");
     }
     if (piece.isGlowingInTheDark()) {
         piece.setGlowingInTheDark(false);
@@ -244,7 +246,6 @@ const std::pair<int, int> Game::lastPawnCoordinates() const
 {
     return _lastPawnCoordinates;
 }
-
 
 std::ostream & operator<<(std::ostream & out, const Game & in)
 {
