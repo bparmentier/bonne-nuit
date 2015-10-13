@@ -14,6 +14,7 @@ Game::~Game()
 }
 
 Game::Game(unsigned playersNumber) :
+    _players{Color::PURPLE, Color::BLACK, Color::RED, Color::GREEN, Color::BLUE},
     _dropPosition(0),
     _isLightOn(true),
     _winner(Color::EMPTY),
@@ -37,19 +38,29 @@ Game::Game(unsigned playersNumber) :
             _board.at(line).push_back(Piece{Color::EMPTY, false});
         }
     }
-    _players = {Color::PURPLE, Color::BLACK, Color::RED};
+
     _currentPlayer = 0;
 
-    std::vector<Color> _absentPlayers;
-    if (playersNumber <= 4) {
-        _absentPlayers.push_back(Color::GREEN);
+    handleAbsentPlayers(playersNumber);
+}
+
+void Game::handleAbsentPlayers(unsigned playersNumber)
+{
+    std::vector<Color> absentPlayers;
+    if (playersNumber < 4) {
+        absentPlayers.push_back(Color::GREEN);
+        _players.pop_back();
     }
-    if (playersNumber <= 5) {
-        _absentPlayers.push_back(Color::BLUE);
+    if (playersNumber < 5) {
+        absentPlayers.push_back(Color::BLUE);
+        _players.pop_back();
     }
 
-    placeAbsentPlayersPieces(_absentPlayers);
+    if (!absentPlayers.empty()) {
+        placeAbsentPlayersPieces(absentPlayers);
+    }
 }
+
 
 void Game::placeAbsentPlayersPieces(std::vector<Color> absentPlayers)
 {
@@ -64,7 +75,7 @@ void Game::placeAbsentPlayersPieces(std::vector<Color> absentPlayers)
                     _board.at(line).at(column) = Piece(absentPlayer, true);
                     placed = true;
                 }
-            } while (placed == false);
+            } while (!placed);
         }
     }
 }

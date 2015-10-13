@@ -33,6 +33,7 @@ private:
     unsigned _numberOfStarsLeft;
     unsigned _currentPlayer;
 
+    void handleAbsentPlayers(unsigned playersNumber);
     void placeAbsentPlayersPieces(std::vector<Color> absentPlayers);
     void findLastStar();
 
