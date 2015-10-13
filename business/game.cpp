@@ -157,6 +157,12 @@ void Game::turnLightOn()
 
 void Game::reversePiece(unsigned line, unsigned column)
 {
+    if (_gameState == GameState::FIRST_STAGE) {
+        throw std::runtime_error("Cannot reverse piece during first stage");
+    }
+    if (_gameState == GameState::OVER) {
+        throw std::runtime_error("Game is over");
+    }
     Piece &piece = _board.at(line).at(column);
     if (piece.color() == Color::EMPTY) {
         throw std::invalid_argument("No piece here");
