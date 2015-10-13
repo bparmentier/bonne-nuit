@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>458</width>
-    <height>351</height>
+    <width>700</width>
+    <height>700</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Bonne nuit !</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -50,7 +50,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>458</width>
+     <width>700</width>
      <height>19</height>
     </rect>
    </property>
@@ -67,7 +67,7 @@
      <string>&amp;Help</string>
     </property>
     <addaction name="action_Help"/>
-    <addaction name="actionAbout"/>
+    <addaction name="action_About"/>
    </widget>
    <addaction name="menu_Game"/>
    <addaction name="menu_Help"/>
@@ -77,6 +77,9 @@
    <property name="text">
     <string>&amp;New</string>
    </property>
+   <property name="statusTip">
+    <string>Start a new game</string>
+   </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
    </property>
@@ -84,6 +87,9 @@
   <action name="action_Quit">
    <property name="text">
     <string>&amp;Quit</string>
+   </property>
+   <property name="statusTip">
+    <string>Quit game</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
@@ -93,6 +99,9 @@
    <property name="text">
     <string>&amp;Close</string>
    </property>
+   <property name="statusTip">
+    <string>Close current game</string>
+   </property>
    <property name="shortcut">
     <string>Ctrl+W</string>
    </property>
@@ -101,13 +110,19 @@
    <property name="text">
     <string>&amp;Help</string>
    </property>
+   <property name="statusTip">
+    <string>Help</string>
+   </property>
    <property name="shortcut">
     <string>F1</string>
    </property>
   </action>
-  <action name="actionAbout">
+  <action name="action_About">
    <property name="text">
     <string>About</string>
+   </property>
+   <property name="statusTip">
+    <string>About the game</string>
    </property>
   </action>
  </widget>
