@@ -35,8 +35,9 @@ HEADERS  += \
     ui/mainwindow.h \
     ui/qstarpawn.h
 
-FORMS    += mainwindow.ui \
-    gameconfigdialog.ui
+FORMS    += \
+    ui/gameconfigdialog.ui \
+    ui/mainwindow.ui
 
 RESOURCES += \
     resources.qrc
