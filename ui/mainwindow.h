@@ -18,7 +18,7 @@ class MainWindow;
 /*!
  * \brief Main window
  */
-class MainWindow : public QMainWindow
+class MainWindow : public QMainWindow, public Observateur
 {
     Q_OBJECT
 
@@ -34,6 +34,12 @@ public:
      */
     ~MainWindow();
 
+    /*!
+     * \brief Refresh the observer when the game state changes
+     * \param sdo the subject
+     */
+    void rafraichir(SujetDObservation *sdo);
+
 private:
     Ui::MainWindow *ui;
     Game *game;
@@ -41,7 +47,7 @@ private:
 
     void printBoard();
     void connection();
-    void setObserver();
+    void setObservers();
 
 private slots:
     void newGame();

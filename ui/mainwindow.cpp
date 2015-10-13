@@ -27,6 +27,23 @@ MainWindow::~MainWindow()
     ui = nullptr;
 }
 
+void MainWindow::rafraichir(SujetDObservation *sdo)
+{
+    if (sdo != game) {
+        return;
+    }
+    GameState gameState = game->gameState();
+    GameAction gameAction = game->actionToPerform();
+    if (gameState == GameState::FIRST_STAGE) {
+        if (gameAction == GameAction::WAITING_FOR_DICE) {
+            ui->rollDiceButton->setEnabled(true);
+        } else {
+            ui->rollDiceButton->setDisabled(true);
+        }
+    } else if (gameState == GameState::SECOND_STAGE) {
+    }
+}
+
 void MainWindow::connection()
 {
     connect(ui->action_Quit, &QAction::triggered,
@@ -43,10 +60,12 @@ void MainWindow::connection()
             this, &MainWindow::switchLight);
 }
 
-void MainWindow::setObserver()
+void MainWindow::setObservers()
 {
     gameObserver = new GameObserver(game, this);
     ui->graphicsView->setScene(gameObserver);
+
+    game->attacher(this);
     ui->rollDiceButton->setEnabled(true);
 }
 
@@ -76,7 +95,7 @@ void MainWindow::newGame()
 
     if (game == nullptr) {
         game = new Game(configDialog.players());
-        setObserver();
+        setObservers();
     } else {
         return;
     }
@@ -84,6 +103,7 @@ void MainWindow::newGame()
 
 void MainWindow::closeGame()
 {
+    game->detacher(this);
     delete gameObserver;
     gameObserver = nullptr;
     delete game;
@@ -101,9 +121,9 @@ void MainWindow::rollDice()
         try {
             game->rollDice();
         } catch (std::runtime_error const &e) {
-            setStatusTip(QString::fromStdString(e.what()));
+            statusBar()->showMessage(e.what(), 3000);
         } catch (std::invalid_argument const &e) {
-            setStatusTip(QString::fromStdString(e.what()));
+            statusBar()->showMessage(e.what(), 3000);
         }
     }
 }
@@ -118,11 +138,11 @@ void MainWindow::switchLight()
                 game->turnLightOn();
             }
         } catch (std::runtime_error const &e) {
-            setStatusTip(QString::fromStdString(e.what()));
+            statusBar()->showMessage(e.what(), 3000);
         } catch (std::invalid_argument const &e) {
-            setStatusTip(QString::fromStdString(e.what()));
+            statusBar()->showMessage(e.what(), 3000);
         } catch (std::out_of_range const &e) {
-            setStatusTip(QString::fromStdString(e.what()));
+            statusBar()->showMessage(e.what(), 3000);
         }
     }
 }
