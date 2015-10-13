@@ -35,3 +35,6 @@ Makefile*
 
 # Project-specific
 bonne_nuit
+
+# Doxygen documentation
+html
