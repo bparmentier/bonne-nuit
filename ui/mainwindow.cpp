@@ -116,6 +116,7 @@ void MainWindow::closeGame()
         game->detacher(this);
     }
     ui->centralWidget->setDisabled(true);
+    ui->centralWidget->hide();
     delete gameObserver;
     gameObserver = nullptr;
     delete game;
