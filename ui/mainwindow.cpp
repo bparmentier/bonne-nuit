@@ -126,16 +126,25 @@ void MainWindow::closeGame()
 void MainWindow::help()
 {
     QMessageBox::information(this, "Help",
-                             "<h1>How to play</h1>"
-                             "<p>Each player has three pawns of the same color."
-                             "</p>");
+        "<h2>How to play</h2>"
+        "<p>Each player has three pawns of the same color.</p>"
+        "<p>The game takes place in two stages :</p>"
+        "<ol>"
+        "<li>Each player successively rolls the dice and moves the drop of the "
+        "given number along the red pawns, then place one of his pawns with "
+        "the star up around the red pawn.</li>"
+        "<li>When all the pawns have been set, turn the light off and, in the "
+        "same order, each player reverses a pawn of his choice.<br />"
+        "When there is one pawn left, turn the light on. The winner is the "
+        "player of this color.</li>"
+        "</ol>");
 }
 
 void MainWindow::about()
 {
     QMessageBox::about(this, "About Bonne nuit !",
-                       "<p>Game created for ALG3IR class by Bruno Parmentier "
-                       "at École Supérieure d'Informatique, Brussels.");
+        "<p>Game created for ALG3IR class by Bruno Parmentier "
+        "at École Supérieure d'Informatique, Brussels.</p>");
 }
 
 void MainWindow::rollDice()
