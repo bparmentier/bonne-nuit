@@ -14,11 +14,15 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->centralWidget->setVisible(false);
     this->connection();
 }
 
 MainWindow::~MainWindow()
 {
+    if (game != nullptr) {
+        game->detacher(this);
+    }
     delete gameObserver;
     gameObserver = nullptr;
     delete game;
@@ -66,6 +70,7 @@ void MainWindow::setObservers()
 {
     gameObserver = new GameObserver(game, this);
     ui->graphicsView->setScene(gameObserver);
+    ui->centralWidget->setVisible(true);
 
     game->attacher(this);
     ui->rollDiceButton->setEnabled(true);
@@ -105,7 +110,10 @@ void MainWindow::newGame()
 
 void MainWindow::closeGame()
 {
-    game->detacher(this);
+    if (game != nullptr) {
+        game->detacher(this);
+    }
+    ui->centralWidget->setDisabled(true);
     delete gameObserver;
     gameObserver = nullptr;
     delete game;
