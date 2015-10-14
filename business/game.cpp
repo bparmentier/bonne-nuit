@@ -120,7 +120,7 @@ void Game::placePiece(unsigned column)
     _actionToPerform = GameAction::WAITING_FOR_DICE;
     if (_playCount == (_players.size() * 3)) { // each player plays 3 times
         _gameState = GameState::SECOND_STAGE;
-        _actionToPerform = GameAction::WAITING_FOR_REVERSE;
+        _actionToPerform = GameAction::WAITING_FOR_LIGHT_OFF;
     }
 
     notifierChangement();
@@ -141,6 +141,7 @@ void Game::turnLightOff()
         }
     }
     _isLightOn = false;
+    _actionToPerform = GameAction::WAITING_FOR_REVERSE;
 
     notifierChangement();
 }
@@ -177,8 +178,9 @@ void Game::reversePiece(unsigned line, unsigned column)
     }
 
     if (_numberOfStarsLeft == 1) {
-        _gameState = GameState::OVER;
         findLastStar();
+        _gameState = GameState::OVER;
+        _actionToPerform = GameAction::WAITING_FOR_LIGHT_ON;
     }
 
     notifierChangement();

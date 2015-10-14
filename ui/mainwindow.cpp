@@ -32,15 +32,17 @@ void MainWindow::rafraichir(SujetDObservation *sdo)
     if (sdo != game) {
         return;
     }
-    GameState gameState = game->gameState();
     GameAction gameAction = game->actionToPerform();
-    if (gameState == GameState::FIRST_STAGE) {
-        if (gameAction == GameAction::WAITING_FOR_DICE) {
-            ui->rollDiceButton->setEnabled(true);
-        } else {
-            ui->rollDiceButton->setDisabled(true);
-        }
-    } else if (gameState == GameState::SECOND_STAGE) {
+    if (gameAction == GameAction::WAITING_FOR_DICE) {
+        ui->rollDiceButton->setEnabled(true);
+    } else {
+        ui->rollDiceButton->setDisabled(true);
+    }
+    if (gameAction == GameAction::WAITING_FOR_LIGHT_OFF
+            || gameAction == GameAction::WAITING_FOR_LIGHT_ON) {
+        ui->switchLightButton->setEnabled(true);
+    } else {
+        ui->switchLightButton->setDisabled(true);
     }
 }
 
@@ -117,7 +119,8 @@ void MainWindow::help()
 
 void MainWindow::rollDice()
 {
-    if (game != nullptr) {
+    if (game != nullptr
+            && game->actionToPerform() == GameAction::WAITING_FOR_DICE) {
         try {
             game->rollDice();
         } catch (std::runtime_error const &e) {
@@ -126,6 +129,7 @@ void MainWindow::rollDice()
             statusBar()->showMessage(e.what(), 3000);
         }
     }
+
 }
 
 void MainWindow::switchLight()
