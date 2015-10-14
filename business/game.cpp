@@ -14,14 +14,15 @@ Game::~Game()
 
 Game::Game(unsigned playersNumber) :
     _players{Color::PURPLE, Color::BLACK, Color::RED, Color::GREEN, Color::BLUE},
-    _dropPosition(0),
+    _dropPosition(rand() % 9),
     _isLightOn(true),
     _winner(Color::EMPTY),
     _lastPawnCoordinates(-1, -1),
     _gameState(GameState::FIRST_STAGE),
     _playCount(0),
     _actionToPerform(GameAction::WAITING_FOR_DICE),
-    _numberOfStarsLeft(15)
+    _numberOfStarsLeft(15),
+    _currentPlayer(0)
 {
     if (playersNumber < MIN_PLAYERS || playersNumber > MAX_PLAYERS) {
         throw std::invalid_argument(
@@ -37,8 +38,6 @@ Game::Game(unsigned playersNumber) :
             _board.at(line).push_back(Piece{Color::EMPTY, false});
         }
     }
-
-    _currentPlayer = 0;
 
     handleAbsentPlayers(playersNumber);
 }
