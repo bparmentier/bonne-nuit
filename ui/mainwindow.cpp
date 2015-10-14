@@ -73,6 +73,7 @@ void MainWindow::setObservers()
     gameObserver = new GameObserver(game, this);
     ui->graphicsView->setScene(gameObserver);
     ui->centralWidget->setVisible(true);
+    ui->centralWidget->setEnabled(true);
 
     game->attacher(this);
     ui->rollDiceButton->setEnabled(true);
@@ -84,19 +85,15 @@ void MainWindow::setObservers()
 void MainWindow::newGame()
 {
     if (game != nullptr) {
-        if (game->gameState() == GameState::OVER) {
+        QMessageBox::StandardButton newGameRetVal = QMessageBox::question(
+                    this,
+                    "New game",
+                    "Are you sure you want to start a new game?",
+                    QMessageBox::Yes | QMessageBox::No);
+        if (newGameRetVal == QMessageBox::Yes) {
             closeGame();
         } else {
-            QMessageBox::StandardButton newGameRetVal = QMessageBox::question(
-                        this,
-                        "New game",
-                        "Are you sure you want to start a new game?",
-                        QMessageBox::Yes | QMessageBox::No);
-            if (newGameRetVal == QMessageBox::Yes) {
-                closeGame();
-            } else {
-                return;
-            }
+            return;
         }
     }
 
