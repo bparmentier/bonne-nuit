@@ -122,7 +122,7 @@
   </action>
   <action name="action_About">
    <property name="text">
-    <string>About</string>
+    <string>&amp;About</string>
    </property>
    <property name="statusTip">
     <string>About the game</string>

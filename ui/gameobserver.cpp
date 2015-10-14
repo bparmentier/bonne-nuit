@@ -207,9 +207,9 @@ void GameObserver::mousePressEvent(QGraphicsSceneMouseEvent *event)
                 try {
                     _game->placePiece(item->data(KEY_STAR_PAWN_INDICE).toInt());
                 } catch (std::runtime_error const &e) {
-                    //throw e;
+                    statusEvent(e.what());
                 } catch (std::invalid_argument const &e) {
-                    //throw e;
+                    statusEvent(e.what());
                 }
             }
         }
@@ -222,9 +222,9 @@ void GameObserver::mousePressEvent(QGraphicsSceneMouseEvent *event)
             try {
                 _game->reversePiece(redPawnIndice, starPawnIndice);
             } catch (std::runtime_error const &e) {
-                //throw e;
+                statusEvent(e.what());
             } catch (std::invalid_argument const &e) {
-                //throw e;
+                statusEvent(e.what());
             }
 
         }

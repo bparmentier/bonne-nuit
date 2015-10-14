@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->centralWidget->setVisible(false);
+    ui->centralWidget->hide();
     this->connection();
 }
 
@@ -60,6 +60,8 @@ void MainWindow::connection()
             this, &MainWindow::closeGame);
     connect(ui->action_Help, &QAction::triggered,
             this, &MainWindow::help);
+    connect(ui->action_About, &QAction::triggered,
+            this, &MainWindow::about);
     connect(ui->rollDiceButton, &QPushButton::released,
             this, &MainWindow::rollDice);
     connect(ui->switchLightButton, &QPushButton::released,
@@ -74,6 +76,9 @@ void MainWindow::setObservers()
 
     game->attacher(this);
     ui->rollDiceButton->setEnabled(true);
+
+    connect(gameObserver, &GameObserver::statusEvent,
+            this, &MainWindow::setStatusBarMessage);
 }
 
 void MainWindow::newGame()
@@ -122,7 +127,17 @@ void MainWindow::closeGame()
 
 void MainWindow::help()
 {
+    QMessageBox::information(this, "Help",
+                             "<h1>How to play</h1>"
+                             "<p>Each player has three pawns of the same color."
+                             "</p>");
+}
 
+void MainWindow::about()
+{
+    QMessageBox::about(this, "About Bonne nuit !",
+                       "<p>Game created for ALG3IR class by Bruno Parmentier "
+                       "at École Supérieure d'Informatique, Brussels.");
 }
 
 void MainWindow::rollDice()
@@ -132,12 +147,11 @@ void MainWindow::rollDice()
         try {
             game->rollDice();
         } catch (std::runtime_error const &e) {
-            statusBar()->showMessage(e.what(), 3000);
+            setStatusBarMessage(e.what());
         } catch (std::invalid_argument const &e) {
-            statusBar()->showMessage(e.what(), 3000);
+            setStatusBarMessage(e.what());
         }
     }
-
 }
 
 void MainWindow::switchLight()
@@ -150,11 +164,16 @@ void MainWindow::switchLight()
                 game->turnLightOn();
             }
         } catch (std::runtime_error const &e) {
-            statusBar()->showMessage(e.what(), 3000);
+            setStatusBarMessage(e.what());
         } catch (std::invalid_argument const &e) {
-            statusBar()->showMessage(e.what(), 3000);
+            setStatusBarMessage(e.what());
         } catch (std::out_of_range const &e) {
-            statusBar()->showMessage(e.what(), 3000);
+            setStatusBarMessage(e.what());
         }
     }
+}
+
+void MainWindow::setStatusBarMessage(const QString &message)
+{
+    statusBar()->showMessage(message, 3000);
 }

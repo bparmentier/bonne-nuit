@@ -22,6 +22,8 @@ class Game;
  */
 class GameObserver : public QGraphicsScene, public Observateur
 {
+    Q_OBJECT
+
 private:
     static const int KEY_RED_PAWN_INDICE = 0x0;
     static const int KEY_STAR_PAWN_INDICE = 0x1;
@@ -60,6 +62,9 @@ public:
      * \param sdo the subject
      */
     void rafraichir(SujetDObservation *sdo);
+
+signals:
+    void statusEvent(const QString &);
 };
 
 #endif // GAMEOBSERVER_H

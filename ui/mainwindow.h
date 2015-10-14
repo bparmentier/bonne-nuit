@@ -53,8 +53,12 @@ private slots:
     void newGame();
     void closeGame();
     void help();
+    void about();
     void rollDice();
     void switchLight();
+
+public slots:
+    void setStatusBarMessage(const QString &);
 };
 
 #endif // MAINWINDOW_H
