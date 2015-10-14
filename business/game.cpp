@@ -2,7 +2,6 @@
 
 #include <cstdlib>
 #include <stdexcept>
-#include <iostream>
 
 Game::Game() :
     Game(3)
@@ -153,6 +152,7 @@ void Game::turnLightOn()
                                  "is over");
     }
     _isLightOn = true;
+    _actionToPerform = GameAction::WAITING_FOR_LIGHT_OFF;
 
     notifierChangement();
 }
@@ -172,6 +172,7 @@ void Game::reversePiece(unsigned line, unsigned column)
     }
     if (piece.isGlowingInTheDark()) {
         piece.setGlowingInTheDark(false);
+        _currentPlayer = (_currentPlayer + 1) % _players.size();
         _numberOfStarsLeft -= 1;
     } else {
         throw std::runtime_error("Star is already off");
@@ -196,6 +197,7 @@ void Game::findLastStar()
             Piece piece = _board.at(line).at(column);
             if ((piece.color() != Color::EMPTY) && piece.isGlowingInTheDark()) {
                 _lastPawnCoordinates = {line, column};
+                _winner = piece.color();
                 lastStarFound = true;
             }
             column++;

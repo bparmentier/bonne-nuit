@@ -34,6 +34,7 @@ private:
     std::vector<QGraphicsEllipseItem *> redPawns;
     std::vector<std::vector<QStarPawn *>> starPawns;
     QGraphicsSvgItem *drop;
+    QGraphicsTextItem *currentPlayerInfo;
     QBrush background;
 
     void drawPawns(float xcenter, float ycenter, float radius, unsigned pawnNumber);
@@ -41,6 +42,8 @@ private:
     void updateRedPawns();
     void updateStarPawns();
     void updateBackground();
+    void setupCurrentPlayerInfo();
+    void setCurrentPlayerInfoText();
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
 public:

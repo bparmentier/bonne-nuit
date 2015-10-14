@@ -3,5 +3,6 @@
         <file alias="star.svg">resources/star.svg</file>
         <file alias="drop.svg">resources/drop.svg</file>
         <file alias="background_texture.png">resources/seamless_paper_texture.png</file>
+        <file alias="bellota_bold.ttf">resources/bellota_bold.ttf</file>
     </qresource>
 </RCC>

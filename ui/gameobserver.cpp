@@ -2,6 +2,9 @@
 #include "mainwindow.h"
 #include "qstarpawn.h"
 
+#include <QFontDatabase>
+#include <sstream>
+
 #ifndef M_PI
 #define M_PI 3.1415926535
 #endif
@@ -13,6 +16,8 @@ GameObserver::GameObserver(Game *game, QWidget *parent) :
 {
     _game->attacher(this);
     setBackgroundBrush(background);
+
+    setupCurrentPlayerInfo();
     drawPawns(0, 0, 200, 9);
 }
 
@@ -32,6 +37,7 @@ void GameObserver::rafraichir(SujetDObservation *sdo)
     }
     updateRedPawns();
     updateStarPawns();
+    setCurrentPlayerInfoText();
 }
 
 void GameObserver::drawPawns(float xcenter, float ycenter, float radius,
@@ -178,7 +184,6 @@ void GameObserver::updateStarPawns()
             }
         }
     }
-
 }
 
 void GameObserver::updateBackground()
@@ -190,9 +195,51 @@ void GameObserver::updateBackground()
     }
 }
 
+void GameObserver::setupCurrentPlayerInfo()
+{
+    int id = QFontDatabase::addApplicationFont(":/resources/bellota_bold.ttf");
+    QString fontFamily = QFontDatabase::applicationFontFamilies(id).at(0);
+
+    std::stringstream colorStream;
+    colorStream << _game->currentPlayer();
+    QString color(QString::fromStdString(colorStream.str()));
+    currentPlayerInfo = addText(color + " plays", QFont(fontFamily, 20));
+    int x = currentPlayerInfo->boundingRect().x()
+            - currentPlayerInfo->boundingRect().width() / 2;
+    int y = currentPlayerInfo->boundingRect().y()
+            - currentPlayerInfo->boundingRect().height() / 2;
+    currentPlayerInfo->setPos(x, y);
+}
+
+void GameObserver::setCurrentPlayerInfoText()
+{
+    std::stringstream colorStream;
+    if (_game->gameState() == GameState::OVER
+            && _game->actionToPerform() != GameAction::WAITING_FOR_LIGHT_ON) {
+        colorStream << _game->winner();
+        QString winner(QString::fromStdString(colorStream.str()));
+        currentPlayerInfo->setPlainText(winner + " won!");
+    } else {
+        colorStream << _game->currentPlayer();
+        QString color(QString::fromStdString(colorStream.str()));
+        currentPlayerInfo->setPlainText(color + " plays");
+    }
+    if (_game->isLightOn()) {
+        currentPlayerInfo->setDefaultTextColor(QColor(Qt::black));
+    } else {
+        currentPlayerInfo->setDefaultTextColor(QColor(Qt::white));
+
+    }
+    int x = currentPlayerInfo->boundingRect().x()
+            - currentPlayerInfo->boundingRect().width() / 2;
+    int y = currentPlayerInfo->boundingRect().y()
+            - currentPlayerInfo->boundingRect().height() / 2;
+    currentPlayerInfo->setPos(x, y);
+}
+
 void GameObserver::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    QGraphicsScene::mousePressEvent(event);
+    //QGraphicsScene::mousePressEvent(event);
     QGraphicsItem *item = itemAt(event->lastScenePos().x(),
                                  event->lastScenePos().y(),
                                  QTransform());
