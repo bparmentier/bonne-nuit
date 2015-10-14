@@ -95,16 +95,16 @@ void GameObserver::drawStarPawns(float xcenter, float ycenter,
             pawn->setBrush(QBrush(QColor(Qt::black)));
             break;
         case Color::BLUE:
-            pawn->setBrush(QBrush(QColor(Qt::blue)));
+            pawn->setBrush(QBrush(QColor(Qt::darkBlue)));
             break;
         case Color::GREEN:
-            pawn->setBrush(QBrush(QColor(Qt::green)));
+            pawn->setBrush(QBrush(QColor(Qt::darkGreen)));
             break;
         case Color::PURPLE:
             pawn->setBrush(QBrush(QColor(Qt::darkMagenta)));
             break;
         case Color::RED:
-            pawn->setBrush(QBrush(QColor(Qt::red)));
+            pawn->setBrush(QBrush(QColor(Qt::darkRed)));
             break;
         default:
             pawn->setStarOn(false);
@@ -158,16 +158,16 @@ void GameObserver::updateStarPawns()
                     pawn->setBrush(QBrush(QColor(Qt::black)));
                     break;
                 case Color::BLUE:
-                    pawn->setBrush(QBrush(QColor(Qt::blue)));
+                    pawn->setBrush(QBrush(QColor(Qt::darkBlue)));
                     break;
                 case Color::GREEN:
-                    pawn->setBrush(QBrush(QColor(Qt::green)));
+                    pawn->setBrush(QBrush(QColor(Qt::darkGreen)));
                     break;
                 case Color::PURPLE:
                     pawn->setBrush(QBrush(QColor(Qt::darkMagenta)));
                     break;
                 case Color::RED:
-                    pawn->setBrush(QBrush(QColor(Qt::red)));
+                    pawn->setBrush(QBrush(QColor(Qt::darkRed)));
                     break;
                 default:
                     pawn->setBrush(Qt::NoBrush);
