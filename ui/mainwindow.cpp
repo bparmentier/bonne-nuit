@@ -128,7 +128,7 @@ void MainWindow::help()
     QMessageBox::information(this, "Help",
         "<h2>How to play</h2>"
         "<p>Each player has three pawns of the same color.</p>"
-        "<p>The game takes place in two stages :</p>"
+        "<p>The game takes place in two stages:</p>"
         "<ol>"
         "<li>Each player successively rolls the dice and moves the drop of the "
         "given number along the red pawns, then place one of his pawns with "
@@ -137,7 +137,31 @@ void MainWindow::help()
         "same order, each player reverses a pawn of his choice.<br />"
         "When there is one pawn left, turn the light on. The winner is the "
         "player of this color.</li>"
-        "</ol>");
+        "</ol>"
+        "<p>Players order:</p>"
+        "<ul>"
+        "<li>5 players"
+        "<ol>"
+        "<li>PURPLE</li>"
+        "<li>BLACK</li>"
+        "<li>RED</li>"
+        "<li>GREEN</li>"
+        "<li>BLUE</li>"
+        "</ol></li>"
+        "<li>4 players"
+        "<ol>"
+        "<li>PURPLE</li>"
+        "<li>BLACK</li>"
+        "<li>RED</li>"
+        "<li>GREEN</li>"
+        "</ol></li>"
+        "<li>3 players"
+        "<li><ol>"
+        "<li>PURPLE</li>"
+        "<li>BLACK</li>"
+        "<li>RED</li>"
+        "</ol></li>"
+        "</ul>");
 }
 
 void MainWindow::about()
