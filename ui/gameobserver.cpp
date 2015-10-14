@@ -56,9 +56,9 @@ void GameObserver::drawPawns(float xcenter, float ycenter, float radius,
         angle = i * (2.0f * M_PI / pawnNumber);
         x = xcenter + cosf(angle) * radius - (pawnDiameter / 2);
         y = ycenter + sinf(angle) * radius - (pawnDiameter / 2);
-        QGraphicsEllipseItem *pawn;
+        QGraphicsEllipseItem *pawn = addEllipse(0, 0, pawnDiameter, pawnDiameter,
+                                                pen, redBrush);
         pawn->setData(123, i);
-        pawn = addEllipse(0, 0, pawnDiameter, pawnDiameter, pen, redBrush);
         pawn->setPos(x, y);
         if (_game->dropPosition() == i) {
             drop->setPos(x, y);
@@ -260,8 +260,7 @@ void GameObserver::mousePressEvent(QGraphicsSceneMouseEvent *event)
                 }
             }
         }
-    }
-    if (_game->gameState() == GameState::SECOND_STAGE) {
+    } else if (_game->gameState() == GameState::SECOND_STAGE) {
         if (!isRedPawnIndiceEmpty && !isStarPawnIndiceEmpty) {
             int redPawnIndice = item->data(KEY_RED_PAWN_INDICE).toInt();
             int starPawnIndice = item->data(KEY_STAR_PAWN_INDICE).toInt();
