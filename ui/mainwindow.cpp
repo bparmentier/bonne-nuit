@@ -162,6 +162,7 @@ void MainWindow::switchLight()
                 game->turnLightOff();
             } else {
                 game->turnLightOn();
+                ui->switchLightButton->setDisabled(true);
             }
         } catch (std::runtime_error const &e) {
             setStatusBarMessage(e.what());
